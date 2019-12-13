@@ -59,6 +59,12 @@ module YNAB
     # @return [true, false]
     attr_accessor :debugging
 
+    # Set this to set the verbose flag passed to Typhoeus
+    # Default to false.
+    #
+    # @return [true, false]
+    attr_accessor :verbose
+
     # Defines the logger used for debugging.
     # Default to `Rails.logger` (when in Rails) or logging to STDOUT.
     #
@@ -142,6 +148,7 @@ module YNAB
       @key_file = nil
       @debugging = false
       @inject_format = false
+      @verbose = false
       @force_ending_format = false
       @logger = defined?(Rails) ? Rails.logger : Logger.new(STDOUT)
 
