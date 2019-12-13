@@ -110,8 +110,7 @@ require 'ynab/overrides/transactions_api'
 
 module YNAB
   class API
-    def initialize(access_token, host = 'api.youneedabudget.com', useHttps = true)
-      config = Configuration.default
+    def initialize(access_token, host = 'api.youneedabudget.com', useHttps = true, config = Configuration.default)
       config.api_key['Authorization'] = access_token
       config.api_key_prefix['Authorization'] = 'Bearer'
       config.scheme = useHttps ? 'https' : 'http'
