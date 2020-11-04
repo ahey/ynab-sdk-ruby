@@ -13,21 +13,53 @@ Swagger Codegen version: 2.4.15
 require 'date'
 
 module YNAB
-  # The date format setting for the budget.  In some cases the format will not be available and will be specified as null.
-  class DateFormat
-    attr_accessor :format
+  class SaveAccount
+    # The name of the account
+    attr_accessor :name
+
+    # The account type
+    attr_accessor :type
+
+    # The current balance of the account in milliunits format
+    attr_accessor :balance
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'format' => :'format'
+        :'name' => :'name',
+        :'type' => :'type',
+        :'balance' => :'balance'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'format' => :'String'
+        :'name' => :'String',
+        :'type' => :'String',
+        :'balance' => :'Integer'
       }
     end
 
@@ -39,8 +71,16 @@ module YNAB
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'format')
-        self.format = attributes[:'format']
+      if attributes.has_key?(:'name')
+        self.name = attributes[:'name']
+      end
+
+      if attributes.has_key?(:'type')
+        self.type = attributes[:'type']
+      end
+
+      if attributes.has_key?(:'balance')
+        self.balance = attributes[:'balance']
       end
     end
 
@@ -48,8 +88,16 @@ module YNAB
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @format.nil?
-        invalid_properties.push('invalid value for "format", format cannot be nil.')
+      if @name.nil?
+        invalid_properties.push('invalid value for "name", name cannot be nil.')
+      end
+
+      if @type.nil?
+        invalid_properties.push('invalid value for "type", type cannot be nil.')
+      end
+
+      if @balance.nil?
+        invalid_properties.push('invalid value for "balance", balance cannot be nil.')
       end
 
       invalid_properties
@@ -58,8 +106,18 @@ module YNAB
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @format.nil?
+      return false if @name.nil?
+      return false if @type.nil?
+      type_validator = EnumAttributeValidator.new('String', ['checking', 'savings', 'creditCard', 'cash', 'lineOfCredit', 'otherAsset', 'otherLiability'])
+      return false unless type_validator.valid?(@type)
+      return false if @balance.nil?
       true
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] type Object to be assigned
+    def type=(type)
+      @type = type
     end
 
     # Checks equality by comparing each attribute.
@@ -67,7 +125,9 @@ module YNAB
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          format == o.format
+          name == o.name &&
+          type == o.type &&
+          balance == o.balance
     end
 
     # @see the `==` method
@@ -79,7 +139,7 @@ module YNAB
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [format].hash
+      [name, type, balance].hash
     end
     # Builds the object from hash
     # @param [Hash] attributes Model attributes in the form of hash

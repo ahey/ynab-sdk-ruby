@@ -13,21 +13,20 @@ Swagger Codegen version: 2.4.15
 require 'date'
 
 module YNAB
-  # The date format setting for the budget.  In some cases the format will not be available and will be specified as null.
-  class DateFormat
-    attr_accessor :format
+  class SaveAccountWrapper
+    attr_accessor :account
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'format' => :'format'
+        :'account' => :'account'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'format' => :'String'
+        :'account' => :'SaveAccount'
       }
     end
 
@@ -39,8 +38,8 @@ module YNAB
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'format')
-        self.format = attributes[:'format']
+      if attributes.has_key?(:'account')
+        self.account = attributes[:'account']
       end
     end
 
@@ -48,8 +47,8 @@ module YNAB
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @format.nil?
-        invalid_properties.push('invalid value for "format", format cannot be nil.')
+      if @account.nil?
+        invalid_properties.push('invalid value for "account", account cannot be nil.')
       end
 
       invalid_properties
@@ -58,7 +57,7 @@ module YNAB
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @format.nil?
+      return false if @account.nil?
       true
     end
 
@@ -67,7 +66,7 @@ module YNAB
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          format == o.format
+          account == o.account
     end
 
     # @see the `==` method
@@ -79,7 +78,7 @@ module YNAB
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [format].hash
+      [account].hash
     end
     # Builds the object from hash
     # @param [Hash] attributes Model attributes in the form of hash
